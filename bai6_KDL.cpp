@@ -66,7 +66,7 @@ int main() {
 	else
 		cout << "NO\n";
 	// 9.
-	if (n < 20 && n>30)
+	if (!(n < 20 && n>30))
 		cout << "YES\n";
 	else
 		cout << "NO\n";
