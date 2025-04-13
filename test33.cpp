@@ -1,97 +1,55 @@
 #include<iostream>
-#include<ctime>
 using namespace std;
 
-void khoiTao(int *p,int n){
-	for(int i = 0; i < n; i++){
-		*(p + i) = rand() % 31;
+
+void khoiTao(int **&p, int r, int c){
+	p = new int *[r];
+	for(int i = 0; i < r; i++){
+		p[i] = new int [c];
 	}
 }
-void xuatMang(int *p,int n){
-	for(int i = 0; i < n; i++){
-		cout << p[i] << " ";
+void giaiPhong(int **&p, int r, int c){
+	for(int i = 0; i < r; i++){
+		delete [] p[i];
 	}
-	cout << endl;
-}	
-int timMin(int a[], int n){
-	if(n == 1) return a[0];
-	int min = timMin(a, n - 1);
-	return a[n-1] < min ? a[n-1] : min;
+	delete [] p;
 }
-int* viTriMin(int*p, int n){
-	int*min = p;
-	for(int i = 1; i < n; i++){
-		if(*min > *(p+i))
-			min = p + i;
-	}
-	return min;
+int chap(int n, int k){
+	if(n == k || k == 0)
+		return 1;
+	return chap(n-1,k) + chap(n-1,k-1);
 }
-int* viTriMax(int*p, int n){
-	int*max = p;
-	for(int i = 1; i < n; i++){
-		if(*max < *(p+i))
-			max = p + i;
-	}
-	return max;
-}
-void fibo(int*p,int n){
-	if(n > 0)
-		p[0] = 0;
-	if(n > 1)
-		p[1] = 1;
-	for(int i = 2; i < n; i++){
-		p[i] = p[i-1] + p[i-2];
+void Pascal(int **p,int h){
+	for(int i = 0; i < h; i++){
+		for(int j = 0; j <= i; j++){
+			p[i][j] = chap(i,j);
+		}
 	}
 }
-void daoNguocMang(int *p, int l, int r){
-	if(l >= r) return;
-	swap(p[l],p[r]);
-	daoNguocMang(p,l+1,r-1);
-}
-int * timKiem(int * p, int n ,int x){
-	for(int i = 0; i < n; i++){
-		if(*(p+i) == x)
-			return p + i;
+void xuat(int **p, int h){
+	for(int i = 0; i < h; i++){
+		for(int j = 0; j <= i; j++){
+			cout << p[i][j] << " ";
+		}
+		cout << endl;
 	}
-	return NULL;
-}
-int * timKiem1(int * p, int n ,int x){
-	if(n == 0) return NULL;
-	if(*(p + n - 1) == x)
-		return p + n - 1;
-	return timKiem(p, n - 1, x);
 }
 int main(){
-	srand(time(0));
-	int*a = new int[30];
-	int n;
-	cin >> n;
-	khoiTao(a,n);
-	xuatMang(a,n);
-	int * vtMax = viTriMax(a,n);
-	cout << "Vi tri max " << *vtMax << " : " << vtMax << endl;
-	int * vtMin = viTriMin(a,n);
-	cout << "Vi tri min " << *vtMin << " : " << vtMin << endl;
+	int h;
+	cout << "Nhap h : ";
+	cin >> h;
 	
-	cout << "Mang co " << n << " so fibo : ";
-	fibo(a,n);
-	xuatMang(a,n);
+	int **p = new int *[h];
+	for(int i = 0; i < h; i++){
+		p[i] = new int [h];
+	}
+	Pascal(p,h);
+	xuat(p,h);
 	
-	cout << "Mang duoc dao nguoc : ";
-	daoNguocMang(a,0,n-1);
-	xuatMang(a,n);
-	
-	int x;
-	cout << "Nhap so can tim kiem : ";
-	cin >> x;
-	int * tim = timKiem(a,n,x);
-	if(*tim > 0)
-		cout << "Tim thay "<< x <<" o dia chi : " << tim <<endl;
-	else
-		cout << "Khong tim thay ! \n";
-	delete []a;
-	delete vtMax;
-	delete vtMin;
-	delete tim;
+	//Huy cap phat
+	for(int i = 0; i < h; i++){
+		delete [] p[i];
+	}
+	delete [] p;
 	return 0;
-} 
+}
